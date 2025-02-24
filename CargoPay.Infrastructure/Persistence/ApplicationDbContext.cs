@@ -12,7 +12,7 @@ namespace CargoPay.Infrastructure.Persistence
         {
             _configuration = configuration;
         }
-
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
             : base(options)
         {

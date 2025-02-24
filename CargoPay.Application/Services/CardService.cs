@@ -10,14 +10,14 @@ namespace CargoPay.Application.Services
     {
         private readonly ICardRepository _cardRepository;
         private readonly IPaymentRepository _paymentRepository;
-        private readonly UFEService _ufeService;
+        private readonly IUFEService _ufeService;
         private readonly ApplicationDbContext _dbContext;
         private readonly IMemoryCache _cache;
         public CardService(ApplicationDbContext dbContext,
             ICardRepository cardRepository, 
             IPaymentRepository paymentRepository,
             IMemoryCache cache,
-            UFEService ufeService)
+            IUFEService ufeService)
         {
             _dbContext = dbContext;
             _cardRepository = cardRepository;
