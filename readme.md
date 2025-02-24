@@ -1,24 +1,29 @@
 # CargoPay
 
-Add in Package of CargoPay.API the package Microsoft.EntityFrameworkCore.Tools
-or user the command Install-Package Microsoft.EntityFrameworkCore.Tools
+## Requirements
 
-Add in Package of CargoPay.Infraestructure the package 
-Microsoft.EntityFrameworkCore.Design
-or user the command Install-Package Microsoft.EntityFrameworkCore.Design
+To run this project, you will need:
 
+- .NET 8 SDK
+- SQL Server (or any other supported database)
 
+## Database Scripts
 
-For each change in data models, execute the following command to generate the new data models:
-```dotnet tool install --global dotnet-ef
+The database scripts are located in the `CargoPay.Infrastructure/Migrations/DATABASE_SCRIPTS.sql` folder. You can find the necessary SQL files to create and populate the database.
 
-It's necesary change the connectionString in the file 
-CargoPay.Infraestructure/Persistence/ApplicationDBContext.cs
-Change into OnConfiguring function string "YourConnectionString" to your connection DB
+## Configuring the Database Connection
 
+To modify the database connection string, follow these steps:
 
-After that, in folder CargoPay.Infraestructure, execute: (Note: -o parameter can be used to change the location of the models to migrate)
-```dotnet ef migrations add "Initial" -o "Migrations"
-```dotnet ef database update
+1. Open the `appsettings.json` file located in the root of the project.
+2. Locate the `ConnectionStrings` section.
+3. Update the `DefaultConnection` attribute with your database details. For example:
 
 
+## Running the Project
+
+1. Ensure you have the .NET 8 SDK installed.
+2. Ensure your database is running and accessible.
+3. Open the solution in Visual Studio 2022.
+4. Build the solution to restore all dependencies.
+5. Run the project using Visual Studio or the .NET CLI.
