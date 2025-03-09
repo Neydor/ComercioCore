@@ -1,4 +1,4 @@
-# CargoPay
+# ComercioCore
 
 ## Requirements
 
@@ -9,7 +9,7 @@ To run this project, you will need:
 
 ## Database Scripts
 
-The database scripts are located in the `CargoPay.Infrastructure/Migrations/DATABASE_SCRIPTS.sql` folder. You can find the necessary SQL files to create and populate the database.
+The database scripts are located in the `ComercioCore.Infrastructure/Migrations/DATABASE_SCRIPTS.sql` folder. You can find the necessary SQL files to create and populate the database.
 
 ## Configuring the Database Connection
 
