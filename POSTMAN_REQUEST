@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "7ad60877-8941-41cf-8900-171c325dcc2f",
+		"name": "CargoPay",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4255981"
+	},
+	"item": [
+		{
+			"name": "/api/Auth/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"neydor111\",\r\n  \"email\": \"neydor111@yopmail.com\",\r\n  \"password\": \"Prueb@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44304/api/Auth/register",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44304",
+					"path": [
+						"api",
+						"Auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/Auth/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var token = responseBody.token;\r",
+							"\r",
+							"pm.collectionVariables.set(\"authToken\", token);\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"    pm.expect(token).to.equal(pm.collectionVariables.get(\"authToken\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"neydor111\",\r\n  \"password\": \"Prueb@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44304/api/Auth/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44304",
+					"path": [
+						"api",
+						"Auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/Card/create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"balance\": 500.50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44304/api/Card/create",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44304",
+					"path": [
+						"api",
+						"Card",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/Card/balance/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44304/api/Card/balance/156327010332197",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44304",
+					"path": [
+						"api",
+						"Card",
+						"balance",
+						"156327010332197"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/Card/pay",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `\r",
+							"<style type=\"text/css\">\r",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+							"    .tftable tr {background-color:#ffffff;}\r",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+							"    .tftable tr:hover {background-color:#e0ffff;}\r",
+							"</style>\r",
+							"\r",
+							"<table class=\"tftable\" border=\"1\">\r",
+							"    <tr>\r",
+							"        <th>Error Type</th>\r",
+							"        <th>Error Message</th>\r",
+							"        <th>File Path</th>\r",
+							"        <th>Line Number</th>\r",
+							"    </tr>\r",
+							"    <tr>\r",
+							"        <td>System.Exception</td>\r",
+							"        <td>Insufficient balance</td>\r",
+							"        <td>CargoPay.Application\\Services\\CardService.cs</td>\r",
+							"        <td>64</td>\r",
+							"    </tr>\r",
+							"    <tr>\r",
+							"        <td>System.Exception</td>\r",
+							"        <td>Insufficient balance</td>\r",
+							"        <td>CargoPay.Application\\Services\\CardService.cs</td>\r",
+							"        <td>87</td>\r",
+							"    </tr>\r",
+							"    <tr>\r",
+							"        <td>System.Exception</td>\r",
+							"        <td>Insufficient balance</td>\r",
+							"        <td>CargoPay.API\\Controllers\\CardsController.cs</td>\r",
+							"        <td>36</td>\r",
+							"    </tr>\r",
+							"</table>\r",
+							"`;\r",
+							"\r",
+							"function constructVisualizerPayload() {\r",
+							"    return {\r",
+							"        response: {\r",
+							"            errorType: \"System.Exception\",\r",
+							"            errorMessage: \"Insufficient balance\",\r",
+							"            filePath: [\"CargoPay.Application\\Services\\CardService.cs\", \"CargoPay.Application\\Services\\CardService.cs\", \"CargoPay.API\\Controllers\\CardsController.cs\"],\r",
+							"            lineNumber: [64, 87, 36]\r",
+							"        }\r",
+							"    };\r",
+							"}\r",
+							"\r",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cardNumber\": \"156327010332197\",\r\n  \"amount\": 21\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44304/api/Card/pay",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44304",
+					"path": [
+						"api",
+						"Card",
+						"pay"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

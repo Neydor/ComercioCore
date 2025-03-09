@@ -1,0 +1,32 @@
+version: '3.4'
+
+networks:
+  comerciocore:
+
+services:
+  comerciocoredb:
+    container_name: comerciocoredb
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password@12345#
+    networks:
+      - comerciocore
+  comerciocore.api:
+    container_name: comerciocore.api
+    image: ${DOCKER_REGISTRY-}comerciocoreapi
+    build:
+      context: .
+      dockerfile: ComercioCore.API/Dockerfile
+    ports:
+      - 8001:80 
+    depends_on:
+      - comerciocoredb
+    environment:
+      - DB_HOST=comerciocoredb
+      - DB_NAME=ComercioCoreDB
+      - DB_SA_PASSWORD=Password@12345#
+    networks:
+      - comerciocore
