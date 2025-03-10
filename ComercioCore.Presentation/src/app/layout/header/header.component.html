@@ -1,0 +1,35 @@
+<p-menubar [model]="items">
+  <ng-template #start>
+    <i class="pi pi-briefcase" style="font-size: 2rem"></i>
+
+  </ng-template>
+  <ng-template #item let-item let-root="root">
+    <p-stepper *ngIf="isAuthenticated" [(value)]="steperValue" class="basis-[40rem] modification" [linear]="true">
+      <p-step-list>
+        <p-step [value]="1">Lista Formulario</p-step>
+        <p-divider layout="vertical" />
+        <p-step [value]="2">Crear Formulario</p-step>
+      </p-step-list>
+    </p-stepper>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="flex items-center gap-2">
+      <span *ngIf="!isAuthenticated">ComercioCore</span>
+      <div *ngIf="isAuthenticated" class="p-d-flex p-ai-center p-mt-3 p-ml-3">
+        <p-avatar icon="pi pi-user" styleClass="p-mr-2" size="large" shape="circle"
+          (click)="menuUsuario.toggle($event)"></p-avatar>
+        <div>
+          <div class="p-text-bold" style="font-size: 1.1rem;">
+            Bienvenido!
+          </div>
+          <div>{{ currentUser.correo || 'a@a.com' }}</div>
+          <div style="font-size: 0.9rem; color: #666;">
+            {{ currentUser?.rol || 'Usuario' }}
+          </div>
+        </div>
+        <p-menu #menuUsuario [popup]="true" [model]="opcionesUsuario"></p-menu>
+      </div>
+    </div>
+  </ng-template>
+</p-menubar>

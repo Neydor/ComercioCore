@@ -100,17 +100,19 @@ builder.Services.AddSwaggerGen(c =>
 //CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowedOrigins",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-
-            policy.WithOrigins("http://localhost:58971")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowedOrigins", policy =>
+    {
+        policy.WithOrigins(
+            "https://localhost:57145",
+            "http://localhost:57145",
+            "http://localhost:51122",
+            "http://localhost:4200",
+            "http://localhost:58971",
+            "http://comerciocore.presentation")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
 //Usuario modificador
@@ -129,12 +131,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-//Middleware
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 //Activate CORS, Authentication and Authorization
 app.UseCors("AllowedOrigins");
+//Middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

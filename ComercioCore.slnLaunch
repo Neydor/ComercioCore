@@ -6,6 +6,11 @@
         "Path": "docker-compose.dcproj",
         "Action": "Start",
         "DebugTarget": "Docker Compose"
+      },
+      {
+        "Path": "ComercioCore.Presentation\\ComercioCore.Presentation.esproj",
+        "Action": "Start",
+        "DebugTarget": "localhost (Edge)"
       }
     ]
   }

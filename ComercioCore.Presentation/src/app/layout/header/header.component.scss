@@ -1,0 +1,58 @@
+.circle-icon {
+  border-radius: 50%;
+}
+
+.p-menubar-start {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+}
+
+:host ::ng-deep {
+  .modification {
+    padding: 12rem;
+  }
+
+  .p-menubar {
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
+  }
+
+  .p-menubar-end {
+    margin-left: 0;
+  }
+
+  .circle-icon {
+    border-radius: 50%;
+  }
+
+  .p-menubar-start {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .stepper-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+}

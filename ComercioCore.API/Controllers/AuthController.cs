@@ -1,5 +1,6 @@
 using ComercioCore.Application.DTOs.Resquests;
 using ComercioCore.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercioCore.API.Controllers
@@ -14,7 +15,7 @@ namespace ComercioCore.API.Controllers
         {
             _authService = authService;
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {

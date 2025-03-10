@@ -1,0 +1,34 @@
+<div class="login-container">
+  <app-header></app-header>
+  <div class="login-wrapper">
+    <h3 class="login-header">Debes iniciar sesión para acceder a la plataforma</h3>
+    <p-card>
+      <ng-template #header>
+        <h2 class="login-header2">Digita tu correo electrónico y la contraseña</h2>
+      </ng-template>
+      <div *ngIf="loading" class="spinner-container">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
+          animationDuration=".5s"></p-progressSpinner>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <p-floatlabel class="p-field" variant="on">
+          <input pInputText id="email" formControlName="email" />
+          <label for="email">Correo Electrónico</label>
+        </p-floatlabel>
+
+        <p-floatlabel class="p-field" variant="on">
+          <input pPassword id="email" formControlName="password" toggleMask="true" />
+          <label for="password">Contraseña</label>
+        </p-floatlabel>
+
+        <div class="p-field-checkbox">
+          <p-checkbox formControlName="acceptTerms" [binary]="true" inputId="acceptTerms"></p-checkbox>
+          <label for="acceptTerms">Acepto términos y condiciones</label>
+        </div>
+
+        <p-button [style]="{ width: '100%' }" severity="primary" [raised]="true" type="submit" label="Iniciar sesión"
+          [disabled]="loginForm.invalid"></p-button>
+      </form>
+    </p-card>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+.login-container {
+  position: relative;
+  height: 100vh;
+  overflow: hidden; // Para evitar que el pseudo-elemento se desborde
+}
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://hackmag.com/wp-content/uploads/2022/06/routing-h.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(2px); // Ajusta el valor según necesites
+  z-index: -1; // Coloca el fondo detrás del contenido
+}
+.login-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+p-card .p-card {
+  border: none;
+  box-shadow: none;
+  background: none !important;
+}
+
+.p-field {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.p-field-checkbox {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.p-password {
+  width: 100%;
+}
+
+.login-header {
+  color:rgb(252, 252, 252);
+  text-align: justify;
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+.login-header2 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-align: center;
+  border-bottom: 1px solid black;
+  padding: 0.5rem 0;
+}
