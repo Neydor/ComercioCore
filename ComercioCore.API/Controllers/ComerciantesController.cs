@@ -3,12 +3,10 @@ using AutoMapper;
 using ComercioCore.Application.Common;
 using ComercioCore.Application.DTOs.Comerciante;
 using ComercioCore.Application.DTOs.Comerciante.Pagination;
-using ComercioCore.Application.DTOs.Resquests;
 using ComercioCore.Application.Interfaces.Services;
 using ComercioCore.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace ComercioCore.API.Controllers
 {

@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Microsoft.AspNetCore.Diagnostics;
 using ComercioCore.API.Filters;
 using Application.Mappings;
 using ComercioCore.API.Middleware;

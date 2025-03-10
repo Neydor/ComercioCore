@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ComercioCore.Domain.Entities;
 
@@ -17,7 +15,7 @@ public partial class Usuario
     public string CorreoElectronico { get; set; }
 
     [Required]
-    public string Contrasena { get; set; } // Almacenará el hash
+    public string Contrasena { get; set; }
 
     [Required]
     public string Rol { get; set; }

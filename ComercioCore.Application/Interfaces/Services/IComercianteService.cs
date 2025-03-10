@@ -1,6 +1,7 @@
 ﻿using Application.Common.Pagination;
 using ComercioCore.Application.DTOs.Comerciante;
 using ComercioCore.Application.DTOs.Comerciante.Pagination;
+using ComercioCore.Application.DTOs.Reportes;
 using ComercioCore.Domain.Entities;
 
 namespace ComercioCore.Application.Interfaces.Services
@@ -13,5 +14,6 @@ namespace ComercioCore.Application.Interfaces.Services
         Task<Comerciante> GetByIdAsync(int id);
         Task<Comerciante> UpdateAsync(int id, Comerciante entity);
         Task DeleteAsync(int id);
+        Task<IEnumerable<ReportesComerciantesActivosDto>> ObtenerComerciantesActivosConEstadisticas();
     }
 }

@@ -1,8 +1,6 @@
-﻿// Application/Services/MunicipioService.cs
-using ComercioCore.Application.Interfaces.Services;
+﻿using ComercioCore.Application.Interfaces.Services;
 using ComercioCore.Domain.Entities;
 using ComercioCore.Domain.Interfaces.Repositories;
-using ComercioCore.Infrastructure.Persistence.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 
 public class MunicipioService : IMunicipioService

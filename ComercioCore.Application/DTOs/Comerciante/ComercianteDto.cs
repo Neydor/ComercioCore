@@ -28,7 +28,6 @@ namespace ComercioCore.Application.DTOs.Comerciante
             ErrorMessage = "Estado debe ser 'Activo' o 'Inactivo'")]
         public string Estado { get; set; }
 
-        // Relación con establecimientos (opcional para consultas detalladas)
         public List<EstablecimientoDto> Establecimientos { get; set; } = new();
     }
 }

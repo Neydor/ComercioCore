@@ -1,14 +1,6 @@
 using ComercioCore.Application.DTOs.Resquests;
 using ComercioCore.Application.Interfaces.Services;
-using ComercioCore.Domain;
-using ComercioCore.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace ComercioCore.API.Controllers
 {

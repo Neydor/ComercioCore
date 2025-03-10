@@ -3,6 +3,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ComercioCore.Application.DTOs.Comerciante;
 using ComercioCore.Application.DTOs.Comerciante.Pagination;
+using ComercioCore.Application.DTOs.Reportes;
 using ComercioCore.Application.Interfaces.Services;
 using ComercioCore.Domain.Entities;
 using ComercioCore.Domain.Interfaces.Repositories;
@@ -100,6 +101,27 @@ namespace ComercioCore.Application.Services
         {
             await _repository.DeleteAsync(id);
             await _repository.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<ReportesComerciantesActivosDto>> ObtenerComerciantesActivosConEstadisticas()
+        {
+            var query = _repository.GetAll()
+                .Include(c => c.Establecimientos)
+                .Where(c => c.Estado == "Activo")
+                .Select(c => new ReportesComerciantesActivosDto
+                {
+                    NombreRazonSocial = c.RazonSocial,
+                    Municipio = c.Municipio.Nombre,
+                    Telefono = c.Telefono,
+                    CorreoElectronico = c.CorreoElectronico,
+                    FechaRegistro = c.FechaRegistro,
+                    Estado = c.Estado,
+                    CantidadEstablecimientos = c.Establecimientos.Count,
+                    TotalIngresos = c.Establecimientos.Sum(e => e.Ingresos),
+                    TotalEmpleados = c.Establecimientos.Sum(e => e.NumeroEmpleados)
+                })
+                .OrderByDescending(c=> c.CantidadEstablecimientos);
+
+            return await query.ToListAsync();
         }
     }
 }
