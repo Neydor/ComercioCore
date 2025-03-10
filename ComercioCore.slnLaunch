@@ -1,0 +1,12 @@
+[
+  {
+    "Name": "dc",
+    "Projects": [
+      {
+        "Path": "docker-compose.dcproj",
+        "Action": "Start",
+        "DebugTarget": "Docker Compose"
+      }
+    ]
+  }
+]

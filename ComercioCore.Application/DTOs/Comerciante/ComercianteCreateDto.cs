@@ -26,7 +26,8 @@ namespace ComercioCore.Application.DTOs.Comerciante
         public string CorreoElectronico { get; set; }
 
         [Required]
-        [RegularExpression("^(Activo|Inactivo)$")]
+        [RegularExpression("^(Activo|Inactivo)$",
+            ErrorMessage = "Estado debe ser 'Activo' o 'Inactivo'")]
         public string Estado { get; set; }
     }
 }

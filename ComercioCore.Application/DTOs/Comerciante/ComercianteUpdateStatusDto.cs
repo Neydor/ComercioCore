@@ -2,10 +2,11 @@
 
 namespace ComercioCore.Application.DTOs.Comerciante
 {
-    public class UpdateEstadoDto
+    public class ComercianteUpdateStatusDto
     {
         [Required]
-        [RegularExpression("^(Activo|Inactivo)$")]
+        [RegularExpression("^(Activo|Inactivo)$",
+            ErrorMessage = "Estado debe ser 'Activo' o 'Inactivo'")]
         public string Estado { get; set; }
     }
 }

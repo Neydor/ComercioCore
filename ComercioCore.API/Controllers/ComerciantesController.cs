@@ -46,8 +46,12 @@ namespace ComercioCore.API.Controllers
         {
             var entity = _mapper.Map<Comerciante>(dto);
             var created = await _comercianteService.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById),
-                ApiResponse<ComercianteDto>.SuccessResult(_mapper.Map<ComercianteDto>(created)));
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = created.Id },
+                ApiResponse<ComercianteDto>.SuccessResult(_mapper.Map<ComercianteDto>(created)
+               )
+             );
         }
 
         [HttpPut("{id}")]
@@ -67,9 +71,9 @@ namespace ComercioCore.API.Controllers
         }
 
         [HttpPatch("{id}/estado")]
-        public async Task<ActionResult<ApiResponse>> UpdateEstado(int id, [FromBody] string estado)
+        public async Task<ActionResult<ApiResponse>> UpdateEstado(int id, ComercianteUpdateStatusDto dto)
         {
-            await _comercianteService.UpdateEstadoAsync(id, estado);
+            await _comercianteService.UpdateEstadoAsync(id, dto.Estado);
             return Ok(ApiResponse.SuccessResult("Estado actualizado"));
         }
     }

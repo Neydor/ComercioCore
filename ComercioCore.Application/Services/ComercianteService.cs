@@ -58,6 +58,7 @@ namespace ComercioCore.Application.Services
         public async Task<Comerciante> CreateAsync(Comerciante entity)
         {
             SetAuditFields(entity);
+            entity.FechaRegistro = DateTime.UtcNow;
             await _repository.AddAsync(entity);
             await _repository.SaveChangesAsync();
             return entity;
@@ -66,8 +67,13 @@ namespace ComercioCore.Application.Services
         public async Task<Comerciante> UpdateAsync(int id, Comerciante entity)
         {
             var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+            {
+                throw new KeyNotFoundException($"Comerciante con ID {id} no encontrado");
+            }
             _mapper.Map(entity, existing);
             SetAuditFields(existing);
+            _repository.Update(existing);
             await _repository.SaveChangesAsync();
             return existing;
         }

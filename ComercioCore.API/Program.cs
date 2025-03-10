@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using ComercioCore.API.Filters;
 using Application.Mappings;
+using ComercioCore.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ builder.Services.AddControllers(options => {
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-var dbConectionString = $"Server={dbHost};Initial Catalog={dbName};User Id=sa;Password={dbPassword};";
+var dbConectionString = $"Data Source={dbHost};Initial Catalog={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True;Encrypt=True;";
 
 builder.Services.AddDbContext<ComercioCoreDbContext>(options =>
     options.UseSqlServer(dbConectionString));
@@ -40,6 +41,9 @@ builder.Services.AddScoped<IEstablecimientoRepository, EstablecimientoRepository
 builder.Services.AddScoped<IComercianteService, ComercianteService>();
 builder.Services.AddScoped<IMunicipioService, MunicipioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+//Logger
+builder.Services.AddLogging();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
@@ -94,32 +98,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Swagger
-builder.Services.AddSwaggerGen(c => {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ComercioCore API", Version = "v1" });
-
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-        {
-            new OpenApiSecurityScheme {
-                Reference = new OpenApiReference {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
-
 //CORS
 builder.Services.AddCors(options =>
 {
@@ -127,6 +105,10 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+
+            policy.WithOrigins("http://localhost:58971")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -138,9 +120,6 @@ builder.Services.AddHttpContextAccessor();
 //CACHE
 builder.Services.AddMemoryCache();
 
-//Middleware para manejo de excepciones
-builder.Services.AddTransient<ExceptionHandlerMiddleware>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -150,6 +129,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
+//Middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 //Activate CORS, Authentication and Authorization
@@ -157,9 +139,6 @@ app.UseCors("AllowedOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-//Middleware
-app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.MapControllers();
 

@@ -16,20 +16,17 @@ namespace ComercioCore.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<Usuario> _userManager;
         private readonly IAuthService _authService;
-        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService, IConfiguration configuration)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _configuration = configuration;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            var result = await _authService.Login(request.Email, request.Password);
+            var result = await _authService.Login(request.CorreoElectronico, request.Contrasena);
 
             return result.Success ?
                 Ok(result) :

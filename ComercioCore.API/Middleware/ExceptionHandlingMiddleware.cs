@@ -29,17 +29,16 @@ namespace ComercioCore.API.Middleware
             }
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
             var response = new ApiResponse { Success = false };
 
-            context.Response.StatusCode = exception switch
-            {
-                _ => (int)HttpStatusCode.InternalServerError
-            };
+            // Eliminar el caso de ValidationException
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            response.Message = "Error interno del servidor";
+            _logger.LogError(exception, "Error no controlado");
 
-            response.Message = "Ocurrió un error interno";
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
     }
