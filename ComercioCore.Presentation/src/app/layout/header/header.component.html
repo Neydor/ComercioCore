@@ -1,6 +1,7 @@
-<p-menubar [model]="items">
+<p-menubar class="layout-topbar" [model]="items">
   <ng-template #start>
-    <i class="pi pi-briefcase" style="font-size: 2rem"></i>
+          <p-image src="/assets/images/logo.png" alt="Image" width="80"/>
+    <!-- <i class="pi pi-briefcase" style="font-size: 2rem"></i> -->
 
   </ng-template>
   <ng-template #item let-item let-root="root">
@@ -16,11 +17,11 @@
   <ng-template #end>
     <div class="flex items-center gap-2">
       <span *ngIf="!isAuthenticated">ComercioCore</span>
-      <div *ngIf="isAuthenticated" class="p-d-flex p-ai-center p-mt-3 p-ml-3">
+      <div (click)="menuUsuario.toggle($event)" style="cursor: pointer;" *ngIf="isAuthenticated" class="flex flex-row items-center gap-2">
         <p-avatar icon="pi pi-user" styleClass="p-mr-2" size="large" shape="circle"
-          (click)="menuUsuario.toggle($event)"></p-avatar>
+          ></p-avatar>
         <div>
-          <div class="p-text-bold" style="font-size: 1.1rem;">
+          <div class="p-text-bold font-bold" style="font-size: 1.1rem; color: #333a7b;">
             Bienvenido!
           </div>
           <div>{{ currentUser.correo || 'a@a.com' }}</div>

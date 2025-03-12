@@ -2,6 +2,7 @@
 using ComercioCore.Application.DTOs;
 using ComercioCore.Application.DTOs.Comerciante;
 using ComercioCore.Application.DTOs.Establecimiento;
+using ComercioCore.Application.DTOs.Reportes;
 using ComercioCore.Domain.Entities;
 
 namespace Application.Mappings
@@ -37,6 +38,10 @@ namespace Application.Mappings
                 .ForMember(dest => dest.NombreRazonSocial,
                     opt => opt.MapFrom(src => src.RazonSocial))
                 .ReverseMap();
+            CreateMap<Comerciante, ComercianteUpdateDto>()
+                .ForMember(dest => dest.Telefono,
+                    opt => opt.MapFrom(src => src.Telefono))
+                .ReverseMap();
 
             CreateMap<Comerciante, ComercianteReporteDto>()
                 .ForMember(dest => dest.CantidadEstablecimientos,
@@ -61,6 +66,9 @@ namespace Application.Mappings
                     opt => opt.MapFrom(src => src.Comerciante))
                 .ReverseMap()
                 .ForMember(dest => dest.Comerciante, opt => opt.Ignore());
+
+            //Reportes
+            CreateMap<ReporteComercianteActivoSP, ReportesComerciantesActivosDto>();
         }
     }
 }

@@ -11,5 +11,6 @@ namespace ComercioCore.Domain.Interfaces.Repositories
         Task DeleteAsync(int id);
         Task SaveChangesAsync();
         Task<bool> Exists(int id);
+        Task<IEnumerable<ReporteComercianteActivoSP>> ReporteComerciantesActivosSP();
     }
 }

@@ -137,14 +137,17 @@ VALUES
 GO
 
 -- RETO 04: Procedimiento almacenado
+USE ComercioCoreDB;
+GO
+
 CREATE OR ALTER PROCEDURE ObtenerComerciantesActivos
 AS
 BEGIN
     SELECT
         c.RazonSocial,
-        m.Nombre as Municipio,
+        m.Nombre AS Municipio,
         c.Telefono,
-        c.CorreoElectronico,
+        COALESCE(c.CorreoElectronico, '') AS CorreoElectronico,
         c.FechaRegistro,
         c.Estado,
         COUNT(e.ID) AS CantidadEstablecimientos,
@@ -152,7 +155,7 @@ BEGIN
         COALESCE(SUM(e.NumeroEmpleados), 0) AS CantidadEmpleados
     FROM Comerciante c
     LEFT JOIN Establecimiento e ON c.ID = e.ComercianteID
-	inner join Municipio m ON c.MunicipioId = m.ID
+    INNER JOIN Municipio m ON c.MunicipioId = m.ID
     WHERE c.Estado = 'Activo'
     GROUP BY
         c.RazonSocial,
@@ -163,4 +166,9 @@ BEGIN
         c.Estado
     ORDER BY CantidadEstablecimientos DESC;
 END;
+GO
+
+
+USE ComercioCoreDB
+EXEC ObtenerComerciantesActivos;
 GO

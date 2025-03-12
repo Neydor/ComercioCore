@@ -27,6 +27,8 @@ namespace ComercioCore.Application.DTOs.Comerciante
         [RegularExpression("^(Activo|Inactivo)$",
             ErrorMessage = "Estado debe ser 'Activo' o 'Inactivo'")]
         public string Estado { get; set; }
+        
+        public DateTime FechaRegistro { get; set; }
 
         public List<EstablecimientoDto> Establecimientos { get; set; } = new();
     }

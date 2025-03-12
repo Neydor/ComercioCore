@@ -1,7 +1,10 @@
 ﻿using ComercioCore.Application.DTOs.Reportes;
 using ComercioCore.Application.Interfaces.Services;
+using ComercioCore.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Globalization;
 using System.Text;
 
@@ -33,7 +36,7 @@ namespace ComercioCore.API.Controllers
                 );
         }
 
-        private string GenerarCsv(IEnumerable<ReportesComerciantesActivosDto> comerciantes)
+        private string GenerarCsv(IEnumerable<ReporteComercianteActivoSP> comerciantes)
         {
             var csv = new StringBuilder();
 
@@ -43,8 +46,10 @@ namespace ComercioCore.API.Controllers
             // Datos
             foreach (var c in comerciantes)
             {
+                //RazonSocial	Municipio	Telefono	CorreoElectronico	FechaRegistro	Estado	CantidadEstablecimientos	TotalIngresos	CantidadEmpleados
+                
                 csv.AppendLine(
-                    $"{EscapePipe(c.NombreRazonSocial)}|" +
+                    $"{EscapePipe(c.RazonSocial)}|" +
                     $"{EscapePipe(c.Municipio)}|" +
                     $"{EscapePipe(c.Telefono ?? "N/A")}|" +
                     $"{EscapePipe(c.CorreoElectronico ?? "N/A")}|" +
@@ -52,7 +57,7 @@ namespace ComercioCore.API.Controllers
                     $"{EscapePipe(c.Estado)}|" +
                     $"{c.CantidadEstablecimientos}|" +
                     $"{c.TotalIngresos:N2}|" +
-                    $"{c.TotalEmpleados}");
+                    $"{c.CantidadEmpleados}");
             }
 
             return csv.ToString();

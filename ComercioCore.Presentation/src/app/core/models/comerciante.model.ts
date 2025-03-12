@@ -1,6 +1,6 @@
 export interface Comerciante {
-  id: number;
-  razonSocial: string;
+  id: string;
+  nombreRazonSocial: string;
   telefono?: string;
   correoElectronico?: string;
   fechaRegistro: Date;
@@ -9,6 +9,7 @@ export interface Comerciante {
   municipioId: string;
   municipio: Municipio;
   poseeEstablecimientos: boolean;
+  establecimientos?: Establecimiento[];
 }
 
 export interface Municipio {

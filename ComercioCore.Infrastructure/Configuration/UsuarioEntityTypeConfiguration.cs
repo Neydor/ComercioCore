@@ -6,25 +6,25 @@ namespace ComercioCore.Infrastructure.Configuration
 {
     public class UsuarioEntityTypeConfiguration : IEntityTypeConfiguration<Usuario>
     {
-        public void Configure(EntityTypeBuilder<Usuario> builder)
+        public void Configure(EntityTypeBuilder<Usuario> entity)
         {
-            builder.HasKey(e => e.Id).HasName("PK__Usuario__3214EC276995779B");
+            entity.HasKey(e => e.Id).HasName("PK__Usuario__3214EC27502E3FEE");
 
-            builder.ToTable("Usuario");
+            entity.ToTable("Usuario");
 
-            builder.HasIndex(e => e.CorreoElectronico, "UQ__Usuario__531402F38D061136").IsUnique();
+            entity.HasIndex(e => e.CorreoElectronico, "UQ__Usuario__531402F347872681").IsUnique();
 
-            builder.Property(e => e.Id).HasColumnName("ID");
-            builder.Property(e => e.Contrasena)
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Contrasena)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            builder.Property(e => e.CorreoElectronico)
+            entity.Property(e => e.CorreoElectronico)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            builder.Property(e => e.Nombre)
+            entity.Property(e => e.Nombre)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            builder.Property(e => e.Rol)
+            entity.Property(e => e.Rol)
                 .HasMaxLength(20)
                 .IsUnicode(false);
         }

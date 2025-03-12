@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { StepperModule } from 'primeng/stepper';
 import { SplitterModule } from 'primeng/splitter';
 import { DividerModule } from 'primeng/divider';
+import { ImageModule } from 'primeng/image';
 @Component({
   standalone: true,
   imports: [
@@ -21,7 +22,8 @@ import { DividerModule } from 'primeng/divider';
     MenubarModule,
     StepperModule,
     SplitterModule,
-    DividerModule
+    DividerModule,
+    ImageModule
   ],
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -48,10 +50,10 @@ export class HeaderComponent {
     });
     this.opcionesUsuario = [
       {
-        label: 'Perfil',
-        icon: 'pi pi-user',
+        label: 'Lista de comercios',
+        icon: 'pi pi-list',
         command: () => {
-          this.router.navigate(['/perfil']);
+          this.router.navigate(['/home']);
         }
       },
       {

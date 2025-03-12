@@ -1,0 +1,53 @@
+.header-cell {
+  background-color: #4f9cee;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.contenedor-principal {
+  position: relative;
+  min-height: 100vh;
+  margin-bottom: 50px;
+}
+
+.body-cell {
+  text-align: center;
+}
+.barra-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #0c1554;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  z-index: 100;
+}
+
+.p-paginator-page.p-paginator-page-selected {
+  background: red;
+}
+
+:host ::ng-deep .p-paginator-page {
+  background: white;
+  border-radius: 0;
+  border: 1px solid #a7a7a7;
+  color: black;
+}
+:host ::ng-deep .p-paginator-page-selected,
+:host ::ng-deep .p-paginator-prev,
+:host ::ng-deep .p-paginator-next {
+  background: #4f9cee;
+  color: white;
+  border-radius: 0;
+  border: 1px solid #a7a7a7;
+}
+
+:host ::ng-deep .p-paginator-pages,
+:host ::ng-deep .p-paginator {
+  gap: 0;
+}
+:host ::ng-deep .p-select {
+  border-radius: 0;
+}

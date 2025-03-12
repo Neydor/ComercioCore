@@ -1,1 +1,116 @@
+<app-header [steperValue]="2"></app-header>
+<div class="relative pb-[4rem] " style="background-color: #e3e8f6; min-height: calc(100vh - 6rem);">
+  <div *ngIf="loading" class="spinner-overlay">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+  <div class="flex flex-row bg-[#f4f6fe]" *ngIf="comerciante?.nombreRazonSocial">
 
+    <h1 class="title mb-4 text-4xl font-extrabold leading-none tracking-tight "
+          style="color:#202e77;border-bottom: 1px solid #e8e8e8; margin:0; padding: 2rem 1rem;">
+          {{comerciante?.nombreRazonSocial}}
+        </h1>
+  </div>
+  <div class="p-[7rem]">
+    <p-card class="bg-[#fefefe] shadow-lg">
+      <ng-template #header>
+        <h1 class="title mb-4 text-3xl font-extrabold leading-none tracking-tight "
+          style="color:#202e77;border-bottom: 1px solid #e8e8e8; margin:0; padding: 2rem 1rem;">
+          Datos Generales
+        </h1>
+      </ng-template>
+      <form #comercianteForm="ngForm" class="flex flex-row w-full h-full " [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="flex flex-col w-full h-full">
+          <p-floatlabel class="p-field" variant="on">
+
+            <input aria-describedby="razonSocial-help" id="razonSocial" type="text" pInputText
+              formControlName="razonSocial"
+              [ngClass]="{'ng-invalid ng-dirty': form.get('razonSocial')?.invalid && form.get('razonSocial')?.touched}" />
+            <label for="razonSocial">
+              Razón Social
+              <span class="text-red-500">
+                *
+              </span>
+            </label>
+            <small id="razonSocial-help" *ngIf="form.get('razonSocial')?.invalid && form.get('razonSocial')?.touched"
+              class="p-error">Razón
+              Social es requerida
+            </small>
+          </p-floatlabel>
+
+          <p-floatlabel class="p-field" variant="on">
+            <p-select id="city" [options]="municipios" formControlName="city" optionLabel="nombre" [filter]="true"
+              filterBy="nombre" dataKey="id" placeholder="Seleccione un municipio" [loading]="municipios.length === 0"
+              [showClear]="true"
+              [ngClass]="{'ng-invalid ng-dirty': form.get('city')?.invalid && form.get('city')?.touched}">
+            </p-select>
+            <label for="city">
+              Municipio <span class="text-red-500">*</span>
+            </label>
+            <small *ngIf="form.get('city')?.invalid && form.get('city')?.touched" class="p-error">Ciudad es requerida
+            </small>
+          </p-floatlabel>
+
+          <p-floatlabel class="p-field" variant="on">
+            <p-inputmask mask="9999999999" id="phone" formControlName="phone" />
+            <label for="phone">Teléfono</label>
+          </p-floatlabel>
+        </div>
+        <p-divider layout="vertical" />
+        <div class="flex flex-col w-full h-full">
+
+          <p-floatlabel class="p-field" variant="on">
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email" pInputText formControlName="email"
+              [ngClass]="{'ng-invalid ng-dirty': form.get('email')?.invalid && form.get('email')?.touched}" />
+            <small *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="p-error">Correo electrónico
+              inválido
+            </small>
+          </p-floatlabel>
+
+          <p-floatlabel class="p-field" variant="on">
+            <p-datepicker id="registrationDate" formControlName="registrationDate" [showIcon]="true"
+              dateFormat="dd/mm/yy"
+              [ngClass]="{'ng-invalid ng-dirty': form.get('registrationDate')?.invalid && form.get('registrationDate')?.touched}"></p-datepicker>
+            <label for="registrationDate">
+              Fecha de registro <span class="text-red-500">*</span>
+            </label>
+            <small *ngIf="form.get('registrationDate')?.invalid && form.get('registrationDate')?.touched"
+              class="p-error">Fecha de registro es requerida
+            </small>
+          </p-floatlabel>
+
+          <div class="p-field-checkbox">
+            <p-checkbox id="hasEstablishments" formControlName="hasEstablishments" [binary]="true"
+              inputId="hasEstablishments"></p-checkbox>
+            <label for="hasEstablishments">Posee establecimientos?</label>
+          </div>
+        </div>
+      </form>
+    </p-card>
+  </div>
+  <div
+    class="rounded-t-[2rem]
+    flex flex-row items-center!
+    justify-between content-center items-end gap-[2rem]
+    fixed bottom-[0] left-[0] z-100 p-[2rem] mx-[3rem] "
+    style="background-color: #243c8f; width: calc(100% - 6rem);">
+    <div *ngIf="isAdmin" class="flex flex-row gap-[1rem]">
+      <div class="flex flex-col">
+        <a class="text-white">Total Ingresos Formulario:</a>
+        <a class="text-3xl font-bold " style="color: #67a8e3;  margin: 0; ">{{ totalIngresos | currency}}</a>
+      </div>
+      <p-divider layout="vertical" [style]="{color: '#67a8e3'}"></p-divider>
+      <div class="flex flex-col">
+        <a class="text-white">Cantidad de empleados:</a>
+        <a class="text-3xl font-bold " style="color: #67a8e3;  margin: 0; ">{{totalEmpleados}} </a>
+      </div>
+    </div>
+
+    <div class="flex flex-row gap-[2rem] items-center!">
+      <a class="text-white">Si ya ingresaste todos los datos, crea tu formulario aqui</a>
+      <p-button class="justify-content-end" [style]="{backgroundColor: '#ed0073', border: 'none'}" (click)="onSubmit()"
+        [disabled]="!form.valid" type="button" label="Enviar Formulario" styleClass="p-button-primary"></p-button>
+    </div>
+
+  </div>
+</div>

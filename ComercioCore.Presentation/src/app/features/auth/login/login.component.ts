@@ -1,10 +1,8 @@
-// src/app/components/login/login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-// PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
@@ -32,10 +30,10 @@ import { Subscription } from 'rxjs';
     CheckboxModule,
     FloatLabelModule,
     ProgressSpinnerModule,
-    HeaderComponent
+    HeaderComponent,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.css'],
   providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
@@ -53,7 +51,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.authSub = this.authService.currentUser$.subscribe(user => {
       if (user) {
-        // User is already authenticated, redirect to home
         this.router.navigate(['/home']);
       }
     });
@@ -80,9 +77,9 @@ export class LoginComponent implements OnInit {
       this.loginForm.markAllAsTouched();
       return;
     }
+    this.loading = true;
     var correoElectronico = this.loginForm.get('email')?.value;
     var contrasena = this.loginForm.get('password')?.value;
-    this.loading = true;
     this.authService.login(correoElectronico, contrasena).subscribe({
       next: () => {
         this.router.navigate(['/home']);

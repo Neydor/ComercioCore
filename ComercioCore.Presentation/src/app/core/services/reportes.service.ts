@@ -9,11 +9,11 @@ import { environment } from '@env/environment';
   providedIn: 'root'
 })
 export class ReportesService {
-  private readonly API_URL = `${environment.apiUrl}/api/exportar`;
+  private readonly API_URL = `${environment.apiUrl}/api/Reportes`;
 
   constructor(private http: HttpClient) {}
 
   exportarComerciantesCSV(): Observable<Blob> {
-    return this.http.get(`${this.API_URL}/Reportes/comerciantes-activos`, { responseType: 'blob' });
+    return this.http.get(`${this.API_URL}/comerciantes-activos`, { responseType: 'blob' });
   }
 }

@@ -65,14 +65,21 @@ namespace ComercioCore.Application.Services
             return entity;
         }
 
-        public async Task<Comerciante> UpdateAsync(int id, Comerciante entity)
+        public async Task<Comerciante> UpdateAsync(int id, ComercianteUpdateDto dto)
         {
             var existing = await _repository.GetByIdAsync(id);
             if (existing == null)
             {
                 throw new KeyNotFoundException($"Comerciante con ID {id} no encontrado");
             }
-            _mapper.Map(entity, existing);
+             // Debug - log values before mapping
+            Console.WriteLine($"Before mapping - DTO Phone: {dto.Telefono}, Entity Phone: {existing.Telefono}");
+            
+            _mapper.Map(dto, existing);
+            
+            // Debug - log value after mapping
+            Console.WriteLine($"After mapping - Entity Phone: {existing.Telefono}");
+            
             SetAuditFields(existing);
             _repository.Update(existing);
             await _repository.SaveChangesAsync();
@@ -102,26 +109,9 @@ namespace ComercioCore.Application.Services
             await _repository.DeleteAsync(id);
             await _repository.SaveChangesAsync();
         }
-        public async Task<IEnumerable<ReportesComerciantesActivosDto>> ObtenerComerciantesActivosConEstadisticas()
+        public async Task<IEnumerable<ReporteComercianteActivoSP>> ObtenerComerciantesActivosConEstadisticas()
         {
-            var query = _repository.GetAll()
-                .Include(c => c.Establecimientos)
-                .Where(c => c.Estado == "Activo")
-                .Select(c => new ReportesComerciantesActivosDto
-                {
-                    NombreRazonSocial = c.RazonSocial,
-                    Municipio = c.Municipio.Nombre,
-                    Telefono = c.Telefono,
-                    CorreoElectronico = c.CorreoElectronico,
-                    FechaRegistro = c.FechaRegistro,
-                    Estado = c.Estado,
-                    CantidadEstablecimientos = c.Establecimientos.Count,
-                    TotalIngresos = c.Establecimientos.Sum(e => e.Ingresos),
-                    TotalEmpleados = c.Establecimientos.Sum(e => e.NumeroEmpleados)
-                })
-                .OrderByDescending(c=> c.CantidadEstablecimientos);
-
-            return await query.ToListAsync();
+            return await _repository.ReporteComerciantesActivosSP();
         }
     }
 }

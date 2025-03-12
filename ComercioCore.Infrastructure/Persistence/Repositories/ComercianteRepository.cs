@@ -3,6 +3,8 @@ using ComercioCore.Infrastructure.Persistence;
 using ComercioCore.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.Data.SqlClient;
+using System.Xml;
 
 namespace ComercioCore.Infrastructure.Persistence.Repositories
 {
@@ -19,6 +21,7 @@ namespace ComercioCore.Infrastructure.Persistence.Repositories
         {
             return await _context.Comerciantes
                 .Include(c => c.Municipio)
+                .Include(c => c.Establecimientos)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -53,6 +56,14 @@ namespace ComercioCore.Infrastructure.Persistence.Repositories
         public async Task<bool> Exists(int id)
         {
             return await _context.Comerciantes.AnyAsync(c => c.Id == id);
+        }
+
+        public async Task<IEnumerable<ReporteComercianteActivoSP>> ReporteComerciantesActivosSP()
+        {
+            var resultados = await _context.Set<ReporteComercianteActivoSP>()
+                .FromSqlRaw("EXEC ComercioCoreDB.dbo.ObtenerComerciantesActivos")
+                .ToListAsync();
+            return resultados;
         }
     }
 }

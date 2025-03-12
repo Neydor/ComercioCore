@@ -6,8 +6,9 @@ import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 
 import Aura from '@primeng/themes/aura';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
+import { SuccessCheckInterceptor } from '@core/interceptors/success.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,14 +20,21 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura,
-        options: {
-          prefix: 'p',
-          darkModeSelector: 'false',
-          cssLayer: false
-        }
+          preset: Aura,
+          options: {
+             darkModeSelector: 'false',
+             cssLayer: {
+                name: 'primeng',
+                order: 'theme, base, primeng'
+            }
+          }
       }
-    }),
+  }),
     provideHttpClient(),
-  ]
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SuccessCheckInterceptor,
+      multi: true
+    }
+  ],
 };

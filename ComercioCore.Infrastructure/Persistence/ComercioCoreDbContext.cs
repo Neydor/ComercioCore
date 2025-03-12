@@ -25,6 +25,7 @@ public partial class ComercioCoreDbContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
     public virtual DbSet<Municipio> Municipio { get; set; }
+    public DbSet<ReporteComercianteActivoSP> Reporte { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -39,6 +40,11 @@ public partial class ComercioCoreDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ComercioCoreDbContext).Assembly);
+        modelBuilder.Entity<ReporteComercianteActivoSP>().HasNoKey();
+        modelBuilder.Entity<Comerciante>()
+       .HasMany(c => c.Establecimientos)
+       .WithOne(e => e.Comerciante)
+       .OnDelete(DeleteBehavior.Cascade);
     }
     
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

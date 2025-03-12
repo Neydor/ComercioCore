@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Comerciante, ComercianteFilterDto, ComercianteUpdateDto, ComercianteUpdateStatusDto } from "@core/models/comerciante.model";
-import { Observable } from "rxjs";
+import { map, Observable, pipe } from "rxjs";
 import { environment } from "@env/environment";
 import { Injectable } from "@angular/core";
 import { ApiResponse, PaginatedResult } from "@core/models/api-response.model";
+import { Establecimiento } from '../models/comerciante.model';
 
 @Injectable({ providedIn: 'root' })
 export class ComerciantesService {
@@ -39,18 +40,33 @@ export class ComerciantesService {
 
     const dataparams = new URLSearchParams(queryParams);
 
-    return this.http.get<ApiResponse<PaginatedResult<Comerciante>>>(`${this.apiUrl}?${dataparams.toString()}`);
+    return this.http.get<ApiResponse<PaginatedResult<Comerciante>>>(`${this.apiUrl}?${dataparams.toString()}`)
+    .pipe(
+      map(response => {
+          response.data.data = response.data.data.map(comerciante => ({
+            ...comerciante,
+            cantidadEstablecimientos: comerciante.establecimientos?.length || 0
+          }));
+        return response;
+      })
+    )
   }
 
-  deleteComerciante(id: number): Observable<void> {
+  deleteComerciante(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  updateComerciante(id: number, updateDto: ComercianteUpdateDto): Observable<Comerciante> {
+  updateComerciante(id: string, updateDto: ComercianteUpdateDto): Observable<Comerciante> {
     return this.http.put<Comerciante>(`${this.apiUrl}/${id}`, updateDto);
   }
 
-  updateEstado(id: number, updateStatusDto: ComercianteUpdateStatusDto): Observable<void> {
+  updateEstado(id: string, updateStatusDto: ComercianteUpdateStatusDto): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/estado`, updateStatusDto);
+  }
+  getComercianteById(id: string){
+    return this.http.get<Comerciante>(`${this.apiUrl}/${id}`);
+  }
+  createComerciante(comerciante: Comerciante): Observable<Comerciante> {
+    return this.http.post<Comerciante>(this.apiUrl, comerciante);
   }
 }

@@ -6,27 +6,27 @@ namespace ComercioCore.Infrastructure.Configuration
 {
     public class EstablecimientoTypeConfiguration : IEntityTypeConfiguration<Establecimiento>
     {
-        public void Configure(EntityTypeBuilder<Establecimiento> builder)
+        public void Configure(EntityTypeBuilder<Establecimiento> entity)
         {
-            builder.HasKey(e => e.Id).HasName("PK__Establec__3214EC27AF100268");
+            entity.HasKey(e => e.Id).HasName("PK__Establec__3214EC27A742C58D");
 
-            builder.ToTable("Establecimiento", tb => tb.HasTrigger("TRG_Establecimiento_Auditoria"));
+            entity.ToTable("Establecimiento", tb => tb.HasTrigger("TRG_Establecimiento_Auditoria"));
 
-            builder.Property(e => e.Id).HasColumnName("ID");
-            builder.Property(e => e.ComercianteId).HasColumnName("ComercianteID");
-            builder.Property(e => e.FechaActualizacion).HasColumnType("datetime");
-            builder.Property(e => e.Ingresos).HasColumnType("decimal(18, 2)");
-            builder.Property(e => e.NombreEstablecimiento)
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ComercianteId).HasColumnName("ComercianteID");
+            entity.Property(e => e.FechaActualizacion).HasColumnType("datetime");
+            entity.Property(e => e.Ingresos).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.NombreEstablecimiento)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            builder.Property(e => e.UsuarioActualizacion)
+            entity.Property(e => e.UsuarioActualizacion)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            builder.HasOne(d => d.Comerciante).WithMany(p => p.Establecimientos)
+            entity.HasOne(d => d.Comerciante).WithMany(p => p.Establecimientos)
                 .HasForeignKey(d => d.ComercianteId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Estableci__Comer__3F466844");
+                .HasConstraintName("FK__Estableci__Comer__4222D4EF");
         }
     }
 }

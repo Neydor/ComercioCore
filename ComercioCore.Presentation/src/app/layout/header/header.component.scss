@@ -16,43 +16,71 @@
 }
 
 :host ::ng-deep {
-  .modification {
-    padding: 12rem;
+  .p-stepper{
+    .p-steplist{
+        .p-step{
+          .p-step-title{
+            color: #7f7a8a;
+          }
+          .p-step-header {
+            .p-step-number{
+              background-color: #068bea;
+              color: white;
+            }
+          }
+        }
+        .p-step.p-disabled  .p-step-header .p-step-number{
+          background-color: #5e5d5c;
+          color: white;
+        }
+    }
   }
+}
 
-  .p-menubar {
-    border: none;
-    border-bottom: 1px solid black;
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    position: relative;
-    justify-content: space-between;
-    align-content: center;
-    flex-wrap: wrap;
-  }
+:host ::ng-deep p-menubar {
+  height: 6rem;
+  display: flex;
+}
 
-  .p-menubar-end {
-    margin-left: 0;
-  }
+:host ::ng-deep .p-menubar {
+  border: none;
+  border-bottom: 3.5px solid #e8e8e8;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  align-content: center;
+  flex-wrap: wrap;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 6rem;
+  background-color: #fefefe;
+}
 
-  .circle-icon {
-    border-radius: 50%;
-  }
+:host ::ng-deep .p-menubar-end {
+  margin-left: 0;
+}
 
-  .p-menubar-start {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
-  }
+:host ::ng-deep .circle-icon {
+  border-radius: 50%;
+}
 
-  .stepper-container {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-  }
+:host ::ng-deep .p-menubar-start {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+:host ::ng-deep .stepper-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }

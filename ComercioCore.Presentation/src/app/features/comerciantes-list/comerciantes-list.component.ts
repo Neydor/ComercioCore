@@ -1,6 +1,5 @@
-// comerciantes-list.component.ts
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import {
   Comerciante,
   ComercianteFilterDto,
@@ -12,38 +11,69 @@ import { ComerciantesService } from '@core/services/comerciantes.service';
 import { ReportesService } from '@core/services/reportes.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag'; // Importa el TagModule
+import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { Subscription } from 'rxjs';
+import { PaginatorModule } from 'primeng/paginator';
+import { SelectModule } from 'primeng/select';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Router } from '@angular/router';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @Component({
   imports: [
     CommonModule,
     TableModule,
     TagModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    PaginatorModule,
+    SelectModule,
+    IconFieldModule,
+    InputIconModule,
+    FormsModule,
+    DropdownModule,
+    DialogModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule
   ],
   selector: 'app-comerciantes-list',
   templateUrl: './comerciantes-list.component.html',
+  styleUrls: ['./comerciantes-list.component.css'],
   providers: [ConfirmationService, MessageService]
 })
 export class ComerciantesListComponent {
   comerciantes: Comerciante[] = [];
+  first = 0;
+  rows: number = 10;
   totalRecords: number = 0;
+  currentPage = 1;
+  pageSizeOptions = [5, 10, 15];
+  pageNumbers: number[] = [];
   totalPages: number = 0;
+
   selectedPageSize = 10;
-  pageSizes = [5, 10, 15];
   isAdmin = false;
   fechaRegistro: Date | null = null;
   nombreSearch: string = '';
   subscriptions: Subscription[] = [];
+
+  loading: boolean = true;
   constructor(
     private comerciantesService: ComerciantesService,
     private reportesService: ReportesService,
     private confirmationService: ConfirmationService,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef,
+        private router: Router,
+
   ) {
     this.isAdmin = this.authService.isAdmin();
   }
@@ -55,6 +85,8 @@ export class ComerciantesListComponent {
   }
 
   loadComerciantes(page: number = 1) {
+    this.currentPage = page;
+
     const filter: ComercianteFilterDto = {
       page: page,
       pageSize: this.selectedPageSize,
@@ -62,15 +94,18 @@ export class ComerciantesListComponent {
       fechaRegistro: this.fechaRegistro,
       nombre: this.nombreSearch
     };
+
     this.subscriptions.push(
       this.comerciantesService.getComerciantes(filter)
         .subscribe({
           next: (response) => {
             if (response.success && response.data) {
               this.comerciantes = response.data.data;
-              // También puedes guardar información de paginación si la necesitas:
               this.totalRecords = response.data.totalCount;
               this.totalPages = response.data.totalPages;
+              this.calcularPaginacion();
+              this.loading = false;
+              this.cdr.detectChanges();
             } else {
               console.error('Error en la respuesta:', response.message);
             }
@@ -78,16 +113,21 @@ export class ComerciantesListComponent {
           error: (error) => {
             console.error('Error al cargar comerciantes:', error);
           }
-        }));
+        })
+    );
   }
 
-  onDelete(id: number) {
+  onDelete(id: string) {
     this.confirmationService.confirm({
       message: '¿Está seguro de eliminar este comerciante?',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
       accept: () => this.deleteComerciante(id)
     });
   }
-  deleteComerciante(id: number) {
+  deleteComerciante(id: string) {
     this.comerciantesService.deleteComerciante(id).subscribe(() => {
       this.loadComerciantes();
     });
@@ -109,20 +149,8 @@ export class ComerciantesListComponent {
       window.URL.revokeObjectURL(url);
     });
   }
-  editComerciante(id: number, updateDto: ComercianteUpdateDto) {
-    this.comerciantesService.updateComerciante(id, updateDto).subscribe({
-      next: () => {
-        this.loadComerciantes();
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Comerciante actualizado correctamente' });
-      },
-      error: (error) => {
-        console.error('Error al actualizar comerciante:', error);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el comerciante' });
-      }
-    });
-  }
 
-  updateEstado(id: number, estado: string) {
+  updateEstado(id: string, estado: string) {
     const updateStatusDto: ComercianteUpdateStatusDto = { estado: estado === 'Activo' ? 'Inactivo' : 'Activo' };
     this.comerciantesService.updateEstado(id, updateStatusDto).subscribe({
       next: () => {
@@ -136,13 +164,28 @@ export class ComerciantesListComponent {
     });
   }
 
-  getSeverity(status: string) {
-    switch (status) {
-      case 'Inactivo':
-        return 'danger';
-      case 'Activo':
-      default:
-        return 'success';
-    }
+  onPageChange(event: any): void {
+    this.first = event.first;
+    this.rows = event.rows;
+    this.currentPage = Math.floor(this.first / this.rows) + 1;
+    this.loadComerciantes(this.currentPage);
+  }
+
+
+  crearFormularioNuevo() {
+    this.router.navigate(['/comerciantes-form']);
+  }
+  editarComerciante(comerciante: Comerciante) {
+    this.router.navigate(['/comerciantes-form', comerciante.id]);
+  }
+
+  onPageSizeChange(event: any) {
+    this.selectedPageSize = event.value;
+    this.currentPage = 1;
+    this.loadComerciantes(1);
+  }
+
+  calcularPaginacion() {
+    this.totalPages = Math.ceil(this.totalRecords / this.selectedPageSize);
   }
 }

@@ -55,8 +55,8 @@ namespace ComercioCore.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ApiResponse<ComercianteDto>>> Update(int id, ComercianteUpdateDto dto)
         {
-            var entity = _mapper.Map<Comerciante>(dto);
-            var updated = await _comercianteService.UpdateAsync(id, entity);
+            //var entity = _mapper.Map<Comerciante>(dto);
+            var updated = await _comercianteService.UpdateAsync(id, dto);
             return Ok(ApiResponse<ComercianteDto>.SuccessResult(_mapper.Map<ComercianteDto>(updated)));
         }
 

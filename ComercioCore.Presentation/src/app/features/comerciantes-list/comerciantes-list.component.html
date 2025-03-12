@@ -1,42 +1,92 @@
-<h1 class="title">Comerciantes</h1>
-<p-table [value]="comerciantes"
-[paginator]="true"
-[rows]="selectedPageSize"
-currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} comerciantes"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Nombre</th>
-      <th>Teléfono</th>
-      <th>Email</th>
-      <th>Fecha Registro</th>
-      <th>Establecimientos</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </ng-template>
+<div *ngIf="loading" class="spinner-overlay">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<div class="comerciante-list-container-main card p-4 w-full contenedor-principal">
+  <div class="header-container">
+    <h1 class="title mb-4 text-4xl font-extrabold leading-none tracking-tight " style="color:#202e77;border-bottom: 1px solid #e8e8e8; margin:0; padding: 2rem 0;">Lista Formularios Creados
+    </h1>
+    <div class="button-container flex items-center justify-end gap-4 p-4">
+      <button pButton label="Crear Formulario Nuevo" class="p-button p-button-primary create-button"
+        style="background-color: #ee0073; border: none;" (click)="crearFormularioNuevo()"></button>
+      <button *ngIf="isAdmin" pButton label="Descargar Reporte en CSV"
+        class="p-button p-button-secondary download-button"
+        style="background-color: transparent;border-color: #ee0073;color: #ee0073" (click)="exportToCSV()"></button>
+    </div>
+  </div>
 
-  <ng-template pTemplate="body" let-comerciante>
-    <tr>
-      <td>{{ comerciante.nombre }}</td>
-      <td>{{ comerciante.telefono || '-' }}</td>
-      <td>{{ comerciante.email || '-' }}</td>
-      <td>{{ comerciante.fechaRegistro | date:'shortDate' }}</td>
-      <td>{{ comerciante.cantidadEstablecimientos }}</td>
-      <td>
-        <p-tag [value]="comerciante.estado" [severity]="getSeverity(comerciante.estado)" />
-      </td>
+  <!-- Tabla de comerciantes -->
+  <p-table stripedRows showGridlines [value]="comerciantes" [responsive]="true"
+    styleClass="p-datatable-sm comerciantes-table">
+    <ng-template #header>
+      <tr>
+        <th class="header-cell">Razón Social</th>
+        <th class="header-cell">Teléfono</th>
+        <th class="header-cell">Correo Electrónico</th>
+        <th class="header-cell">Fecha Registro</th>
+        <th class="header-cell">No. Establecimientos</th>
+        <th class="header-cell">Estado</th>
+        <th class="header-cell">Acciones</th>
+      </tr>
+    </ng-template>
 
-      <td>
-        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editComerciante(comerciante.id, comerciante)" />
-        <p-button *ngIf="comerciante.estado === 'Inactivo'" icon="pi pi-check-circle" class="mr-2" [rounded]="true" [outlined]="true" (click)="updateEstado(comerciante.id, comerciante.estado)" />
-        <p-button *ngIf="comerciante.estado === 'Activo'"  severity="danger" icon="pi pi-times-circle" class="mr-2" [rounded]="true" [outlined]="true" (click)="updateEstado(comerciante.id, comerciante.estado)" />
-        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="onDelete(comerciante.id)" />
-    </td>
+    <ng-template #body let-comerciante>
+      <tr [ngClass]="{'inactive-row': comerciante.estado === 'Inactivo'
+      }">
+        <td class="body-cell">{{ comerciante.nombreRazonSocial }}</td>
+        <td class="body-cell">{{ comerciante.telefono }}</td>
+        <td class="body-cell">{{ comerciante.correoElectronico }}</td>
+        <td class="body-cell">{{ comerciante.fechaRegistro | date:'yyyy-MM-dd' }}</td>
+        <td class="body-cell">{{ comerciante.cantidadEstablecimientos }}</td>
+        <td class="body-cell">
+          <p-button [style]="{ borderWidth: '3px', cursor: 'auto'}" *ngIf="comerciante.estado === 'Activo'"
+            severity="success" variant="outlined" label="{{ comerciante.estado }}" />
+          <p-button [style]="{ borderWidth: '3px', cursor: 'auto'}" *ngIf="comerciante.estado === 'Inactivo'"
+            severity="danger" variant="outlined" label="{{ comerciante.estado }}" />
 
-    </tr>
-    <ng-template #summary>
-      <div class="flex items-center justify-between">Hay {{ totalRecords }} comerciantes.</div>
-  </ng-template>
-  </ng-template>
-</p-table>
+        </td>
+        <td class="body-cell">
+          <div class="actions-container">
+            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text action-button"
+              (click)="editarComerciante(comerciante)"></button>
+
+            <button pButton [icon]="comerciante.estado === 'Activo' ? 'pi pi-times-circle' : 'pi pi-check-circle'"
+              class="p-button-rounded p-button-text action-button"
+              [ngStyle]="{ 'color': comerciante.estado === 'Activo' ? 'red' : 'green' }" [ngClass]="{'status-inactive': comerciante.estado === 'Activo',
+              'status-active': comerciante.estado === 'Inactivo'}"
+              (click)="updateEstado(comerciante.id, comerciante.estado)"></button>
+
+            <button *ngIf="isAdmin" pButton icon="pi pi-trash"
+              class="p-button-rounded p-button-text p-button-danger action-button"
+              (click)="onDelete(comerciante.id)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="7" class="text-center p-4">No se encontraron registros.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- PrimeNG Paginator -->
+  <div class="paginator-container">
+    <div class="flex items-center justify-start">
+      <span class="mx-1 text-color">Items: </span>
+      <p-select [options]="pageSizeOptions" (onChange)="onPageSizeChange($event)" [(ngModel)]="rows"
+        (ngModelChange)="first = 0" />
+      <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" [showPageLinks]="true"
+        [showCurrentPageReport]="false" [showJumpToPageDropdown]="false" [showJumpToPageInput]="false"
+        [showFirstLastIcon]="false" (onPageChange)="onPageChange($event)">
+      </p-paginator>
+    </div>
+
+    <!-- Toast para mensajes -->
+    <p-toast></p-toast>
+    <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+  </div>
+</div>
+<div class="h-[4rem] flex items-center justify-center text-sm w-full barra-inferior" style="background-color: #11176a;color: #cddeef;">
+  Prueba Técnica De Uso Exclusivo de OL Software S.A
+</div>

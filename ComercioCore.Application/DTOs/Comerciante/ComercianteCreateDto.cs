@@ -19,11 +19,11 @@ namespace ComercioCore.Application.DTOs.Comerciante
 
         [Phone]
         [StringLength(20)]
-        public string Telefono { get; set; }
+        public string? Telefono { get; set; }
 
         [EmailAddress]
         [StringLength(100)]
-        public string CorreoElectronico { get; set; }
+        public string? CorreoElectronico { get; set; }
 
         [Required]
         [RegularExpression("^(Activo|Inactivo)$",

@@ -12,8 +12,8 @@ namespace ComercioCore.Application.Interfaces.Services
         Task<Comerciante> CreateAsync(Comerciante entity);
         Task UpdateEstadoAsync(int id, string estado);
         Task<Comerciante> GetByIdAsync(int id);
-        Task<Comerciante> UpdateAsync(int id, Comerciante entity);
+        Task<Comerciante> UpdateAsync(int id, ComercianteUpdateDto entity);
         Task DeleteAsync(int id);
-        Task<IEnumerable<ReportesComerciantesActivosDto>> ObtenerComerciantesActivosConEstadisticas();
+        Task<IEnumerable<ReporteComercianteActivoSP>> ObtenerComerciantesActivosConEstadisticas();
     }
 }

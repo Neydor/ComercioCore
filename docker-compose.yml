@@ -22,6 +22,8 @@ services:
       dockerfile: ComercioCore.API/Dockerfile
     ports:
       - 8001:80 
+      - 8011:8080 
+      - 8021:8081
     depends_on:
       - comerciocoredb
     environment:
